@@ -2,6 +2,7 @@
 #define TABULARASA_TABLECOLUMN_HPP_
 
 #include <string>
+#include <vector>
 
 namespace Tabularasa
 {
@@ -15,6 +16,8 @@ struct TableColumn
     std::string title;
     int minWidth;
 };
+
+typedef std::vector<TableColumn> TableColumns;
 
 } /* namespace Tabularasa */
 
