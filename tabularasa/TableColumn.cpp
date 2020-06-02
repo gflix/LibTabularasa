@@ -4,8 +4,10 @@ namespace Tabularasa
 {
 
 TableColumn::TableColumn(
-    const std::string title,
+    const std::string& id,
+    const std::string& title,
     int minWidth):
+    id(id),
     title(title),
     minWidth(minWidth)
 {

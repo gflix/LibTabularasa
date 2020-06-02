@@ -1,6 +1,7 @@
 set(
     UNITTEST_SOURCE_FILES
     TableColumnTest.cpp
+    TableTest.cpp
 
     gtest_main.cpp
 )

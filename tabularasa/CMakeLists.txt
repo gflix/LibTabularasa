@@ -2,6 +2,7 @@ set(
     LIBRARY_SOURCE_FILES
     Table.cpp
     TableColumn.cpp
+    TableRow.cpp
 )
 
 # compile library from the following source files

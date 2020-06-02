@@ -10,9 +10,11 @@ namespace Tabularasa
 struct TableColumn
 {
     TableColumn(
-        const std::string title = std::string(),
+        const std::string& id,
+        const std::string& title = std::string(),
         int minWidth = 0);
 
+    std::string id;
     std::string title;
     int minWidth;
 };

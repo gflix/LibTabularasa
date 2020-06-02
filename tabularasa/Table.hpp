@@ -1,19 +1,22 @@
 #ifndef TABULARASA_TABLE_HPP_
 #define TABULARASA_TABLE_HPP_
 
+#include <tabularasa/TableColumn.hpp>
+#include <tabularasa/TableRow.hpp>
+
 namespace Tabularasa
 {
 
-class Table
+struct Table
 {
-public:
-    Table();
-    virtual ~Table() = default;
+    typedef std::vector<int> ColumnWidths;
 
-protected:
+    Table(void);
 
-private:
+    static std::string separatorLine(const ColumnWidths& widths, bool compact = false);
 
+    TableColumns columns;
+    TableRows rows;
 };
 
 } /* namespace Tabularasa */
