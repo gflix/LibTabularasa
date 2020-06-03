@@ -16,3 +16,11 @@ TEST(TableTest, generatedCompactSeparatorLine)
     std::string expected { "+----+---+-----+" };
     EXPECT_EQ(expected, Table::separatorLine(widths, true));
 }
+
+TEST(TableTest, generatedRegularCellWithShorterText)
+{
+    int width = 6;
+    std::string text { "foo" };
+    std::string expected { " foo    " };
+    EXPECT_EQ(expected, Table::formattedCell(width, text));
+}

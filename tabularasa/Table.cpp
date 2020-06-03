@@ -21,4 +21,27 @@ std::string Table::separatorLine(const Table::ColumnWidths& widths, bool compact
     return line;
 }
 
+std::string Table::formattedCell(int width, const std::string& text, bool compact)
+{
+    auto textLength = text.size();
+    std::string cell;
+
+    if (textLength < width)
+    {
+        cell = text;
+        cell += std::string(width - textLength, ' ');
+    }
+    else
+    {
+        cell = text.substr(0, width);
+    }
+
+    if (!compact)
+    {
+        cell = ' ' + cell + ' ';
+    }
+
+    return cell;
+}
+
 } /* namespace Tabularasa */

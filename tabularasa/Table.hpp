@@ -14,6 +14,7 @@ struct Table
     Table(void);
 
     static std::string separatorLine(const ColumnWidths& widths, bool compact = false);
+    static std::string formattedCell(int width, const std::string& text = std::string(), bool compact = false);
 
     TableColumns columns;
     TableRows rows;
