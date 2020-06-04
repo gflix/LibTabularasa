@@ -111,4 +111,21 @@ std::string Table::formattedRow(const ColumnWidths& widths, const TableColumns& 
     return line;
 }
 
+int max(int a, int b)
+{
+    return a > b ? a : b;
+}
+
+int Table::getColumnWidth(const TableColumn& column, const TableRows& rows)
+{
+    int width = max(column.minWidth, column.title.size());
+
+    for (auto& row: rows)
+    {
+        width = max(width, getRowCell(row, column.id).size());
+    }
+
+    return width;
+}
+
 } /* namespace Tabularasa */

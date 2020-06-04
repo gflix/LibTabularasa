@@ -189,3 +189,31 @@ TEST(TableTest, throwsWhenFormattingRowWithNonMatchingColumnsAndWidths)
     row["B"] = "X";
     EXPECT_THROW(Table::formattedRow(widths, columns, row), std::invalid_argument);
 }
+
+TEST(TableTest, getsColumnWidthI)
+{
+    TableColumn column { "A", "Foo" };
+    TableRows rows;
+    int expected = 3;
+    EXPECT_EQ(expected, Table::getColumnWidth(column, rows));
+}
+
+TEST(TableTest, getsColumnWidthII)
+{
+    TableColumn column { "A", "Foo" };
+    TableRows rows;
+    rows.push_back(TableRow({ {"A", "1234"} }));
+    int expected = 4;
+    EXPECT_EQ(expected, Table::getColumnWidth(column, rows));
+}
+
+TEST(TableTest, getsColumnWidthIII)
+{
+    TableColumn column { "A", "Foo" };
+    TableRows rows;
+    rows.push_back(TableRow({ {"A", "12345"} }));
+    rows.push_back(TableRow({ {"B", "12345-not-relevant"} }));
+    rows.push_back(TableRow({ {"A", "2345"} }));
+    int expected = 5;
+    EXPECT_EQ(expected, Table::getColumnWidth(column, rows));
+}

@@ -18,6 +18,7 @@ struct Table
     static std::string getRowCell(const TableRow& row, const std::string& id);
     static std::string formattedHeaderRow(const ColumnWidths& widths, const TableColumns& columns, bool compact = false);
     static std::string formattedRow(const ColumnWidths& widths, const TableColumns& columns, const TableRow& row, bool compact = false);
+    static int getColumnWidth(const TableColumn& column, const TableRows& rows);
 
     TableColumns columns;
     TableRows rows;
