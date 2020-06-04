@@ -1,3 +1,4 @@
+#include <stdexcept>
 #include <tabularasa/Table.hpp>
 
 namespace Tabularasa
@@ -13,6 +14,11 @@ std::string Table::separatorLine(const Table::ColumnWidths& widths, bool compact
 
     for (auto width: widths)
     {
+        if (width <= 0)
+        {
+            throw std::domain_error("invalid column width " + std::to_string(width));
+        }
+
         line += '+';
         line += std::string(compact ? width : width + 2, '-');
     }
@@ -23,6 +29,11 @@ std::string Table::separatorLine(const Table::ColumnWidths& widths, bool compact
 
 std::string Table::formattedCell(int width, const std::string& text, bool compact)
 {
+    if (width <= 0)
+    {
+        throw std::domain_error("invalid column width " + std::to_string(width));
+    }
+
     auto textLength = text.size();
     std::string cell;
 
