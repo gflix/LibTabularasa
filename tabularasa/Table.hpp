@@ -1,6 +1,7 @@
 #ifndef TABULARASA_TABLE_HPP_
 #define TABULARASA_TABLE_HPP_
 
+#include <ostream>
 #include <tabularasa/TableColumn.hpp>
 #include <tabularasa/TableRow.hpp>
 
@@ -14,6 +15,7 @@ struct Table
     Table(void);
 
     ColumnWidths getColumnWidths(void) const;
+    void toStream(std::ostream& stream) const;
 
     static std::string separatorLine(const ColumnWidths& widths, bool compact = false);
     static std::string formattedCell(int width, const std::string& text = std::string(), bool compact = false);
@@ -24,6 +26,7 @@ struct Table
 
     TableColumns columns;
     TableRows rows;
+    bool compact;
 };
 
 } /* namespace Tabularasa */

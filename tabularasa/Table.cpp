@@ -4,7 +4,8 @@
 namespace Tabularasa
 {
 
-Table::Table(void)
+Table::Table(void):
+    compact(false)
 {
 }
 
@@ -18,6 +19,23 @@ Table::ColumnWidths Table::getColumnWidths(void) const
     }
 
     return widths;
+}
+
+void Table::toStream(std::ostream& stream) const
+{
+    auto columnWidths = getColumnWidths();
+    auto separator = separatorLine(columnWidths, compact);
+
+    if (!compact)
+        stream << separator << std::endl;
+    stream << formattedHeaderRow(columnWidths, columns, compact) << std::endl;
+    stream << separator << std::endl;
+    for (auto& row: rows)
+    {
+        stream << formattedRow(columnWidths, columns, row, compact) << std::endl;
+    }
+    if (!compact)
+        stream << separator << std::endl;
 }
 
 std::string Table::separatorLine(const Table::ColumnWidths& widths, bool compact)
