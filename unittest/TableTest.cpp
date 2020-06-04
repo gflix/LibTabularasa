@@ -93,3 +93,23 @@ TEST(TableTest, throwsWhenGeneratingCellWithInvalidWidth)
     std::string text { "foozbarbaz" };
     EXPECT_THROW(Table::formattedCell(width, text), std::domain_error);
 }
+
+TEST(TableTest, getsExistingRowCell)
+{
+    TableRow row;
+    row["foo"] = "bar";
+    row["123"] = "456";
+    std::string id { "foo" };
+    std::string expected { "bar" };
+    EXPECT_EQ(expected, Table::getRowCell(row, id));
+}
+
+TEST(TableTest, getsNonExistingRowCell)
+{
+    TableRow row;
+    row["foo"] = "bar";
+    row["123"] = "456";
+    std::string id { "nonexisting" };
+    std::string expected;
+    EXPECT_EQ(expected, Table::getRowCell(row, id));
+}

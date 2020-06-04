@@ -55,4 +55,14 @@ std::string Table::formattedCell(int width, const std::string& text, bool compac
     return cell;
 }
 
+std::string Table::getRowCell(const TableRow& row, const std::string& id)
+{
+    auto it = row.find(id);
+    if (it != row.cend())
+    {
+        return it->second;
+    }
+    return std::string();
+}
+
 } /* namespace Tabularasa */
