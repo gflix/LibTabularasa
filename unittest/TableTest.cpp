@@ -145,3 +145,47 @@ TEST(TableTest, throwsWhenFormattingHeaderRowWithNonMatchingColumnsAndWidths)
     Table::ColumnWidths widths { 3, 2, 5, 100 };
     EXPECT_THROW(Table::formattedHeaderRow(widths, columns), std::invalid_argument);
 }
+
+TEST(TableTest, getsRegularFormattedRow)
+{
+    TableColumns columns;
+    columns.push_back(TableColumn("A", "Foo"));
+    columns.push_back(TableColumn("B", "bAr"));
+    columns.push_back(TableColumn("C", "1234"));
+    Table::ColumnWidths widths { 3, 2, 5 };
+    TableRow row;
+    row["D"] = "not used";
+    row["A"] = "fOO";
+    row["B"] = "X";
+    std::string expected { "| fOO | X  |       |" };
+    EXPECT_EQ(expected, Table::formattedRow(widths, columns, row));
+}
+
+TEST(TableTest, getsCompactFormattedRow)
+{
+    TableColumns columns;
+    columns.push_back(TableColumn("A", "Foo"));
+    columns.push_back(TableColumn("B", "bAr"));
+    columns.push_back(TableColumn("C", "1234"));
+    Table::ColumnWidths widths { 3, 2, 5 };
+    TableRow row;
+    row["D"] = "not used";
+    row["A"] = "fOO";
+    row["B"] = "X";
+    std::string expected { "|fOO|X |     |" };
+    EXPECT_EQ(expected, Table::formattedRow(widths, columns, row, true));
+}
+
+TEST(TableTest, throwsWhenFormattingRowWithNonMatchingColumnsAndWidths)
+{
+    TableColumns columns;
+    columns.push_back(TableColumn("A", "Foo"));
+    columns.push_back(TableColumn("B", "bAr"));
+    columns.push_back(TableColumn("C", "1234"));
+    Table::ColumnWidths widths { 100, 3, 2, 5 };
+    TableRow row;
+    row["D"] = "not used";
+    row["A"] = "fOO";
+    row["B"] = "X";
+    EXPECT_THROW(Table::formattedRow(widths, columns, row), std::invalid_argument);
+}

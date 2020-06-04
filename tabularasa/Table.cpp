@@ -88,4 +88,27 @@ std::string Table::formattedHeaderRow(const ColumnWidths& widths, const TableCol
     return line;
 }
 
+std::string Table::formattedRow(const ColumnWidths& widths, const TableColumns& columns, const TableRow& row, bool compact)
+{
+    if (columns.size() != widths.size())
+    {
+        throw std::invalid_argument(
+            "column count and column width count does not match "
+            "(" + std::to_string(columns.size()) + "!=" + std::to_string(widths.size()) + ")");
+    }
+
+    std::string line;
+
+    auto columnIt = columns.cbegin();
+    auto widthIt = widths.cbegin();
+    for (; columnIt != columns.cend(); ++columnIt, ++widthIt)
+    {
+        line += '|';
+        line += formattedCell(*widthIt, getRowCell(row, columnIt->id), compact);
+    }
+    line += '|';
+
+    return line;
+}
+
 } /* namespace Tabularasa */
