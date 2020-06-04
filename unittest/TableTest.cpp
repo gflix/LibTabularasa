@@ -113,3 +113,35 @@ TEST(TableTest, getsNonExistingRowCell)
     std::string expected;
     EXPECT_EQ(expected, Table::getRowCell(row, id));
 }
+
+TEST(TableTest, getsRegularFormattedHeaderRow)
+{
+    TableColumns columns;
+    columns.push_back(TableColumn("A", "Foo"));
+    columns.push_back(TableColumn("B", "bAr"));
+    columns.push_back(TableColumn("C", "1234"));
+    Table::ColumnWidths widths { 3, 2, 5 };
+    std::string expected { "| Foo | bA | 1234  |" };
+    EXPECT_EQ(expected, Table::formattedHeaderRow(widths, columns));
+}
+
+TEST(TableTest, getsCompactFormattedHeaderRow)
+{
+    TableColumns columns;
+    columns.push_back(TableColumn("A", "Foo"));
+    columns.push_back(TableColumn("B", "bAr"));
+    columns.push_back(TableColumn("C", "1234"));
+    Table::ColumnWidths widths { 3, 2, 5 };
+    std::string expected { "|Foo|bA|1234 |" };
+    EXPECT_EQ(expected, Table::formattedHeaderRow(widths, columns, true));
+}
+
+TEST(TableTest, throwsWhenFormattingHeaderRowWithNonMatchingColumnsAndWidths)
+{
+    TableColumns columns;
+    columns.push_back(TableColumn("A", "Foo"));
+    columns.push_back(TableColumn("B", "bAr"));
+    columns.push_back(TableColumn("C", "1234"));
+    Table::ColumnWidths widths { 3, 2, 5, 100 };
+    EXPECT_THROW(Table::formattedHeaderRow(widths, columns), std::invalid_argument);
+}
