@@ -13,6 +13,8 @@ struct Table
 
     Table(void);
 
+    ColumnWidths getColumnWidths(void) const;
+
     static std::string separatorLine(const ColumnWidths& widths, bool compact = false);
     static std::string formattedCell(int width, const std::string& text = std::string(), bool compact = false);
     static std::string getRowCell(const TableRow& row, const std::string& id);

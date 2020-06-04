@@ -3,6 +3,29 @@
 
 using namespace Tabularasa;
 
+TEST(TableTest, getsColumnWidths)
+{
+    Table table;
+    table.columns.push_back(TableColumn("A", "Foo"));
+    table.columns.push_back(TableColumn("B", "Bar"));
+    table.columns.push_back(TableColumn("C", "-"));
+    table.rows.push_back(TableRow({ {"A", "12345"}, {"B", "X"}, {"C", "y"} }));
+    table.rows.push_back(TableRow({ {"A", "123"}, {"B", "12345-relevant"}, {"C", "n"} }));
+    table.rows.push_back(TableRow({ {"A", "2345"}, {"B", "Y"}, {"C", "n"} }));
+    int expectedSize = 3;
+    Table::ColumnWidths expectedWidths { 5, 14, 1 };
+
+    auto actual = table.getColumnWidths();
+
+    EXPECT_EQ(expectedSize, actual.size());
+    auto expectedIt = expectedWidths.cbegin();
+    auto actualIt = actual.cbegin();
+    for(; expectedIt != expectedWidths.cend(); ++expectedIt, ++actualIt)
+    {
+        EXPECT_EQ(*expectedIt, *actualIt);
+    }
+}
+
 TEST(TableTest, generatedRegularSeparatorLine)
 {
     Table::ColumnWidths widths { 4, 3, 5 };

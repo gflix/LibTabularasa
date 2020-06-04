@@ -8,6 +8,18 @@ Table::Table(void)
 {
 }
 
+Table::ColumnWidths Table::getColumnWidths(void) const
+{
+    ColumnWidths widths;
+
+    for (auto& column: columns)
+    {
+        widths.push_back(getColumnWidth(column, rows));
+    }
+
+    return widths;
+}
+
 std::string Table::separatorLine(const Table::ColumnWidths& widths, bool compact)
 {
     std::string line;
