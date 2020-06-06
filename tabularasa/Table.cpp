@@ -141,6 +141,11 @@ std::string Table::formattedRow(const ColumnWidths& widths, const TableColumns& 
     return line;
 }
 
+int min(int a, int b)
+{
+    return a < b ? a : b;
+}
+
 int max(int a, int b)
 {
     return a > b ? a : b;
@@ -153,6 +158,11 @@ int Table::getColumnWidth(const TableColumn& column, const TableRows& rows)
     for (auto& row: rows)
     {
         width = max(width, getRowCell(row, column.id).size());
+    }
+
+    if (column.maxWidth > 0)
+    {
+        width = min(column.maxWidth, width);
     }
 
     return width;

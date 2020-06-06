@@ -75,6 +75,31 @@ TEST(TableTest, putsCompactTableToStream)
     EXPECT_EQ(expected, actual.str());
 }
 
+TEST(TableTest, putsRegularTableWithMaxWidthToStream)
+{
+    Table table;
+    table.columns.push_back(TableColumn("A", "Foo"));
+    table.columns.push_back(TableColumn("B", "Bar", 0, 7));
+    table.columns.push_back(TableColumn("C", "-"));
+    table.rows.push_back(TableRow({ {"A", "12345"}, {"B", "X"}, {"C", "y"} }));
+    table.rows.push_back(TableRow({ {"A", "123"}, {"B", "12345-relevant"}, {"C", "n"} }));
+    table.rows.push_back(TableRow({ {"A", "2345"}, {"B", "Y"}, {"C", "n"} }));
+    std::string expected {
+        "+-------+---------+---+\n"
+        "| Foo   | Bar     | - |\n"
+        "+-------+---------+---+\n"
+        "| 12345 | X       | y |\n"
+        "| 123   | 12345-r | n |\n"
+        "| 2345  | Y       | n |\n"
+        "+-------+---------+---+\n"
+    };
+
+    std::stringstream actual;
+    table.toStream(actual);
+
+    EXPECT_EQ(expected, actual.str());
+}
+
 TEST(TableTest, generatedRegularSeparatorLine)
 {
     Table::ColumnWidths widths { 4, 3, 5 };
@@ -287,5 +312,16 @@ TEST(TableTest, getsColumnWidthIII)
     rows.push_back(TableRow({ {"B", "12345-not-relevant"} }));
     rows.push_back(TableRow({ {"A", "2345"} }));
     int expected = 5;
+    EXPECT_EQ(expected, Table::getColumnWidth(column, rows));
+}
+
+TEST(TableTest, getsColumnWidthIV)
+{
+    TableColumn column { "A", "Foo", 0, 4 };
+    TableRows rows;
+    rows.push_back(TableRow({ {"A", "12345"} }));
+    rows.push_back(TableRow({ {"B", "12345-not-relevant"} }));
+    rows.push_back(TableRow({ {"A", "2345"} }));
+    int expected = 4;
     EXPECT_EQ(expected, Table::getColumnWidth(column, rows));
 }
