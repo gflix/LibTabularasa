@@ -1,5 +1,6 @@
 set(
     LIBRARY_SOURCE_FILES
+    HorizontalAlignment.cpp
     Table.cpp
     TableColumn.cpp
     TableRow.cpp
@@ -64,7 +65,7 @@ target_include_directories(
 target_compile_options(
     testable
     PRIVATE
-    -O2 -g -coverage
+    -O2 -g -fprofile-arcs -ftest-coverage -coverage
 )
 # target_link_libraries(
 #     testable

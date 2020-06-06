@@ -18,7 +18,11 @@ struct Table
     void toStream(std::ostream& stream) const;
 
     static std::string separatorLine(const ColumnWidths& widths, bool compact = false);
-    static std::string formattedCell(int width, const std::string& text = std::string(), bool compact = false);
+    static std::string formattedCell(
+        int width,
+        const std::string& text = std::string(),
+        bool compact = false,
+        HorizontalAlignment hAlignment = HorizontalAlignment::LEFT);
     static std::string getRowCell(const TableRow& row, const std::string& id);
     static std::string formattedHeaderRow(const ColumnWidths& widths, const TableColumns& columns, bool compact = false);
     static std::string formattedRow(const ColumnWidths& widths, const TableColumns& columns, const TableRow& row, bool compact = false);
