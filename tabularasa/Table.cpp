@@ -57,7 +57,7 @@ std::string Table::separatorLine(const Table::ColumnWidths& widths, bool compact
     return line;
 }
 
-std::string Table::formattedCell(int width, const std::string& text, bool compact)
+std::string Table::formattedCell(int width, const std::string& text, bool compact, HorizontalAlignment hAlignment)
 {
     if (width <= 0)
     {
@@ -65,12 +65,27 @@ std::string Table::formattedCell(int width, const std::string& text, bool compac
     }
 
     auto textLength = text.size();
+    auto centerPadding = (width - textLength) / 2;
     std::string cell;
 
     if (textLength < width)
     {
-        cell = text;
-        cell += std::string(width - textLength, ' ');
+        switch (hAlignment)
+        {
+            case HorizontalAlignment::LEFT:
+                cell = text;
+                cell += std::string(width - textLength, ' ');
+                break;
+            case HorizontalAlignment::CENTER:
+                cell = std::string(centerPadding, ' ');
+                cell += text;
+                cell += std::string(width - textLength - centerPadding, ' ');
+                break;
+            case HorizontalAlignment::RIGHT:
+                cell = std::string(width - textLength, ' ');
+                cell += text;
+                break;
+        }
     }
     else
     {
@@ -111,7 +126,7 @@ std::string Table::formattedHeaderRow(const ColumnWidths& widths, const TableCol
     for (; columnIt != columns.cend(); ++columnIt, ++widthIt)
     {
         line += '|';
-        line += formattedCell(*widthIt, columnIt->title, compact);
+        line += formattedCell(*widthIt, columnIt->title, compact, columnIt->hAlignment);
     }
     line += '|';
 
@@ -134,7 +149,7 @@ std::string Table::formattedRow(const ColumnWidths& widths, const TableColumns& 
     for (; columnIt != columns.cend(); ++columnIt, ++widthIt)
     {
         line += '|';
-        line += formattedCell(*widthIt, getRowCell(row, columnIt->id), compact);
+        line += formattedCell(*widthIt, getRowCell(row, columnIt->id), compact, columnIt->hAlignment);
     }
     line += '|';
 
