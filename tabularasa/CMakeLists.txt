@@ -40,6 +40,19 @@ install(
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
 )
 
+# install header files
+install(
+    FILES
+    AnsiColor.hpp
+    CellColor.hpp
+    HorizontalAlignment.hpp
+    Table.hpp
+    TableCell.hpp
+    TableColumn.hpp
+    TableRow.hpp
+    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/tabularasa
+)
+
 # generate pkg-config file
 configure_file(
     tabularasa.pc.in
