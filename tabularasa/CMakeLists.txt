@@ -2,6 +2,7 @@ set(
     LIBRARY_SOURCE_FILES
     HorizontalAlignment.cpp
     Table.cpp
+    TableCell.cpp
     TableColumn.cpp
     TableRow.cpp
 )

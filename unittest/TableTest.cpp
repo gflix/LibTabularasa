@@ -9,9 +9,21 @@ TEST(TableTest, getsColumnWidths)
     table.columns.push_back(TableColumn("A", "Foo"));
     table.columns.push_back(TableColumn("B", "Bar"));
     table.columns.push_back(TableColumn("C", "-"));
-    table.rows.push_back(TableRow({ {"A", "12345"}, {"B", "X"}, {"C", "y"} }));
-    table.rows.push_back(TableRow({ {"A", "123"}, {"B", "12345-relevant"}, {"C", "n"} }));
-    table.rows.push_back(TableRow({ {"A", "2345"}, {"B", "Y"}, {"C", "n"} }));
+    table.rows.push_back(TableRow({
+        {"A", TableCell("12345")},
+        {"B", TableCell("X")},
+        {"C", TableCell("y")}
+    }));
+    table.rows.push_back(TableRow({
+        {"A", TableCell("123")},
+        {"B", TableCell("12345-relevant")},
+        {"C", TableCell("n")}
+    }));
+    table.rows.push_back(TableRow({
+        {"A", TableCell("2345")},
+        {"B", TableCell("Y")},
+        {"C", TableCell("n")}
+    }));
     int expectedSize = 3;
     Table::ColumnWidths expectedWidths { 5, 14, 1 };
 
@@ -32,9 +44,21 @@ TEST(TableTest, putsRegularTableToStreamI)
     table.columns.push_back(TableColumn("A", "Foo"));
     table.columns.push_back(TableColumn("B", "Bar"));
     table.columns.push_back(TableColumn("C", "-"));
-    table.rows.push_back(TableRow({ {"A", "12345"}, {"B", "X"}, {"C", "y"} }));
-    table.rows.push_back(TableRow({ {"A", "123"}, {"B", "12345-relevant"}, {"C", "n"} }));
-    table.rows.push_back(TableRow({ {"A", "2345"}, {"B", "Y"}, {"C", "n"} }));
+    table.rows.push_back(TableRow({
+        {"A", TableCell("12345")},
+        {"B", TableCell("X")},
+        {"C", TableCell("y")}
+    }));
+    table.rows.push_back(TableRow({
+        {"A", TableCell("123")},
+        {"B", TableCell("12345-relevant")},
+        {"C", TableCell("n")}
+    }));
+    table.rows.push_back(TableRow({
+        {"A", TableCell("2345")},
+        {"B", TableCell("Y")},
+        {"C", TableCell("n")}
+    }));
     std::string expected {
         "+-------+----------------+---+\n"
         "| Foo   | Bar            | - |\n"
@@ -57,9 +81,21 @@ TEST(TableTest, putsRegularTableToStreamII)
     table.columns.push_back(TableColumn("A", "Foo", 0, 0, HorizontalAlignment::RIGHT));
     table.columns.push_back(TableColumn("B", "Bar", 0, 0, HorizontalAlignment::CENTER));
     table.columns.push_back(TableColumn("C", "-"));
-    table.rows.push_back(TableRow({ {"A", "12345"}, {"B", "X"}, {"C", "y"} }));
-    table.rows.push_back(TableRow({ {"A", "123"}, {"B", "12345-relevant"}, {"C", "n"} }));
-    table.rows.push_back(TableRow({ {"A", "2345"}, {"B", "Y"}, {"C", "n"} }));
+    table.rows.push_back(TableRow({
+        {"A", TableCell("12345")},
+        {"B", TableCell("X")},
+        {"C", TableCell("y")}
+    }));
+    table.rows.push_back(TableRow({
+        {"A", TableCell("123")},
+        {"B", TableCell("12345-relevant")},
+        {"C", TableCell("n")}
+    }));
+    table.rows.push_back(TableRow({
+        {"A", TableCell("2345")},
+        {"B", TableCell("Y")},
+        {"C", TableCell("n")}
+    }));
     std::string expected {
         "+-------+----------------+---+\n"
         "|   Foo |      Bar       | - |\n"
@@ -76,6 +112,43 @@ TEST(TableTest, putsRegularTableToStreamII)
     EXPECT_EQ(expected, actual.str());
 }
 
+TEST(TableTest, putsRegularTableToStreamIII)
+{
+    Table table;
+    table.columns.push_back(TableColumn("A", "Foo", 0, 0, HorizontalAlignment::RIGHT));
+    table.columns.push_back(TableColumn("B", "Bar", 0, 0, HorizontalAlignment::CENTER));
+    table.columns.push_back(TableColumn("C", "-"));
+    table.rows.push_back(TableRow({
+        {"A", TableCell("12345")},
+        {"B", TableCell("X", HorizontalAlignment::LEFT)},
+        {"C", TableCell("y")}
+    }));
+    table.rows.push_back(TableRow({
+        {"A", TableCell("123", HorizontalAlignment::CENTER)},
+        {"B", TableCell("12345-relevant")},
+        {"C", TableCell("n")}
+    }));
+    table.rows.push_back(TableRow({
+        {"A", TableCell("2345")},
+        {"B", TableCell("Y", HorizontalAlignment::RIGHT)},
+        {"C", TableCell("n")}
+    }));
+    std::string expected {
+        "+-------+----------------+---+\n"
+        "|   Foo |      Bar       | - |\n"
+        "+-------+----------------+---+\n"
+        "| 12345 | X              | y |\n"
+        "|  123  | 12345-relevant | n |\n"
+        "|  2345 |              Y | n |\n"
+        "+-------+----------------+---+\n"
+    };
+
+    std::stringstream actual;
+    table.toStream(actual);
+
+    EXPECT_EQ(expected, actual.str());
+}
+
 TEST(TableTest, putsCompactTableToStream)
 {
     Table table;
@@ -83,9 +156,21 @@ TEST(TableTest, putsCompactTableToStream)
     table.columns.push_back(TableColumn("A", "Foo"));
     table.columns.push_back(TableColumn("B", "Bar"));
     table.columns.push_back(TableColumn("C", "-"));
-    table.rows.push_back(TableRow({ {"A", "12345"}, {"B", "X"}, {"C", "y"} }));
-    table.rows.push_back(TableRow({ {"A", "123"}, {"B", "12345-relevant"}, {"C", "n"} }));
-    table.rows.push_back(TableRow({ {"A", "2345"}, {"B", "Y"}, {"C", "n"} }));
+    table.rows.push_back(TableRow({
+        {"A", TableCell("12345")},
+        {"B", TableCell("X")},
+        {"C", TableCell("y")}
+    }));
+    table.rows.push_back(TableRow({
+        {"A", TableCell("123")},
+        {"B", TableCell("12345-relevant")},
+        {"C", TableCell("n")}
+    }));
+    table.rows.push_back(TableRow({
+        {"A", TableCell("2345")},
+        {"B", TableCell("Y")},
+        {"C", TableCell("n")}
+    }));
     std::string expected {
         "|Foo  |Bar           |-|\n"
         "+-----+--------------+-+\n"
@@ -106,9 +191,21 @@ TEST(TableTest, putsRegularTableWithMaxWidthToStreamI)
     table.columns.push_back(TableColumn("A", "Foo"));
     table.columns.push_back(TableColumn("B", "Bar", 0, 7));
     table.columns.push_back(TableColumn("C", "-"));
-    table.rows.push_back(TableRow({ {"A", "12345"}, {"B", "X"}, {"C", "y"} }));
-    table.rows.push_back(TableRow({ {"A", "123"}, {"B", "12345-relevant"}, {"C", "n"} }));
-    table.rows.push_back(TableRow({ {"A", "2345"}, {"B", "Y"}, {"C", "n"} }));
+    table.rows.push_back(TableRow({
+        {"A", TableCell("12345")},
+        {"B", TableCell("X")},
+        {"C", TableCell("y")}
+    }));
+    table.rows.push_back(TableRow({
+        {"A", TableCell("123")},
+        {"B", TableCell("12345-relevant")},
+        {"C", TableCell("n")}
+    }));
+    table.rows.push_back(TableRow({
+        {"A", TableCell("2345")},
+        {"B", TableCell("Y")},
+        {"C", TableCell("n")}
+    }));
     std::string expected {
         "+-------+---------+---+\n"
         "| Foo   | Bar     | - |\n"
@@ -131,9 +228,21 @@ TEST(TableTest, putsRegularTableWithMaxWidthToStreamII)
     table.columns.push_back(TableColumn("A", "Foo", 0, 0, HorizontalAlignment::CENTER));
     table.columns.push_back(TableColumn("B", "Bar", 0, 7, HorizontalAlignment::RIGHT));
     table.columns.push_back(TableColumn("C", "-"));
-    table.rows.push_back(TableRow({ {"A", "12345"}, {"B", "X"}, {"C", "y"} }));
-    table.rows.push_back(TableRow({ {"A", "123"}, {"B", "12345-relevant"}, {"C", "n"} }));
-    table.rows.push_back(TableRow({ {"A", "2345"}, {"B", "Y"}, {"C", "n"} }));
+    table.rows.push_back(TableRow({
+        {"A", TableCell("12345")},
+        {"B", TableCell("X")},
+        {"C", TableCell("y")}
+    }));
+    table.rows.push_back(TableRow({
+        {"A", TableCell("123")},
+        {"B", TableCell("12345-relevant")},
+        {"C", TableCell("n")}
+    }));
+    table.rows.push_back(TableRow({
+        {"A", TableCell("2345")},
+        {"B", TableCell("Y")},
+        {"C", TableCell("n")}
+    }));
     std::string expected {
         "+-------+---------+---+\n"
         "|  Foo  |     Bar | - |\n"
@@ -205,25 +314,25 @@ TEST(TableTest, generatedCompactCellWithShorterText)
 TEST(TableTest, generatedRegularCellWithShorterTextCenterAlignedI)
 {
     int width = 6;
-    std::string text { "foo" };
+    TableCell cell { "foo", HorizontalAlignment::CENTER };
     std::string expected { "  foo   " };
-    EXPECT_EQ(expected, Table::formattedCell(width, text, false, HorizontalAlignment::CENTER));
+    EXPECT_EQ(expected, Table::formattedCell(width, cell, false));
 }
 
 TEST(TableTest, generatedRegularCellWithShorterTextCenterAlignedII)
 {
     int width = 6;
-    std::string text { "fo" };
+    TableCell cell { "fo", HorizontalAlignment::CENTER };
     std::string expected { "   fo   " };
-    EXPECT_EQ(expected, Table::formattedCell(width, text, false, HorizontalAlignment::CENTER));
+    EXPECT_EQ(expected, Table::formattedCell(width, cell, false));
 }
 
 TEST(TableTest, generatedRegularCellWithShorterTextRightAligned)
 {
     int width = 6;
-    std::string text { "foo" };
+    TableCell cell { "foo", HorizontalAlignment::RIGHT };
     std::string expected { "    foo " };
-    EXPECT_EQ(expected, Table::formattedCell(width, text, false, HorizontalAlignment::RIGHT));
+    EXPECT_EQ(expected, Table::formattedCell(width, cell, false));
 }
 
 TEST(TableTest, generatedRegularCellWithExactText)
@@ -268,21 +377,21 @@ TEST(TableTest, throwsWhenGeneratingCellWithInvalidWidth)
 TEST(TableTest, getsExistingRowCell)
 {
     TableRow row;
-    row["foo"] = "bar";
-    row["123"] = "456";
+    row["foo"] = TableCell("bar");
+    row["123"] = TableCell("456");
     std::string id { "foo" };
     std::string expected { "bar" };
-    EXPECT_EQ(expected, Table::getRowCell(row, id));
+    EXPECT_EQ(expected, Table::getRowCell(row, id).text);
 }
 
 TEST(TableTest, getsNonExistingRowCell)
 {
     TableRow row;
-    row["foo"] = "bar";
-    row["123"] = "456";
+    row["foo"] = TableCell("bar");
+    row["123"] = TableCell("456");
     std::string id { "nonexisting" };
     std::string expected;
-    EXPECT_EQ(expected, Table::getRowCell(row, id));
+    EXPECT_EQ(expected, Table::getRowCell(row, id).text);
 }
 
 TEST(TableTest, getsRegularFormattedHeaderRow)
@@ -325,9 +434,9 @@ TEST(TableTest, getsRegularFormattedRow)
     columns.push_back(TableColumn("C", "1234"));
     Table::ColumnWidths widths { 3, 2, 5 };
     TableRow row;
-    row["D"] = "not used";
-    row["A"] = "fOO";
-    row["B"] = "X";
+    row["D"] = TableCell("not used");
+    row["A"] = TableCell("fOO");
+    row["B"] = TableCell("X");
     std::string expected { "| fOO | X  |       |" };
     EXPECT_EQ(expected, Table::formattedRow(widths, columns, row));
 }
@@ -340,9 +449,9 @@ TEST(TableTest, getsCompactFormattedRow)
     columns.push_back(TableColumn("C", "1234"));
     Table::ColumnWidths widths { 3, 2, 5 };
     TableRow row;
-    row["D"] = "not used";
-    row["A"] = "fOO";
-    row["B"] = "X";
+    row["D"] = TableCell("not used");
+    row["A"] = TableCell("fOO");
+    row["B"] = TableCell("X");
     std::string expected { "|fOO|X |     |" };
     EXPECT_EQ(expected, Table::formattedRow(widths, columns, row, true));
 }
@@ -355,9 +464,9 @@ TEST(TableTest, throwsWhenFormattingRowWithNonMatchingColumnsAndWidths)
     columns.push_back(TableColumn("C", "1234"));
     Table::ColumnWidths widths { 100, 3, 2, 5 };
     TableRow row;
-    row["D"] = "not used";
-    row["A"] = "fOO";
-    row["B"] = "X";
+    row["D"] = TableCell("not used");
+    row["A"] = TableCell("fOO");
+    row["B"] = TableCell("X");
     EXPECT_THROW(Table::formattedRow(widths, columns, row), std::invalid_argument);
 }
 
@@ -373,7 +482,9 @@ TEST(TableTest, getsColumnWidthII)
 {
     TableColumn column { "A", "Foo" };
     TableRows rows;
-    rows.push_back(TableRow({ {"A", "1234"} }));
+    rows.push_back(TableRow({
+        {"A", TableCell("1234")}
+    }));
     int expected = 4;
     EXPECT_EQ(expected, Table::getColumnWidth(column, rows));
 }
@@ -382,9 +493,15 @@ TEST(TableTest, getsColumnWidthIII)
 {
     TableColumn column { "A", "Foo" };
     TableRows rows;
-    rows.push_back(TableRow({ {"A", "12345"} }));
-    rows.push_back(TableRow({ {"B", "12345-not-relevant"} }));
-    rows.push_back(TableRow({ {"A", "2345"} }));
+    rows.push_back(TableRow({
+        {"A", TableCell("12345")}
+    }));
+    rows.push_back(TableRow({
+        {"B", TableCell("12345-not-relevant")}
+    }));
+    rows.push_back(TableRow({
+        {"A", TableCell("2345")}
+    }));
     int expected = 5;
     EXPECT_EQ(expected, Table::getColumnWidth(column, rows));
 }
@@ -393,9 +510,15 @@ TEST(TableTest, getsColumnWidthIV)
 {
     TableColumn column { "A", "Foo", 0, 4 };
     TableRows rows;
-    rows.push_back(TableRow({ {"A", "12345"} }));
-    rows.push_back(TableRow({ {"B", "12345-not-relevant"} }));
-    rows.push_back(TableRow({ {"A", "2345"} }));
+    rows.push_back(TableRow({
+        {"A", TableCell("12345")}
+    }));
+    rows.push_back(TableRow({
+        {"B", TableCell("12345-not-relevant")}
+    }));
+    rows.push_back(TableRow({
+        {"A", TableCell("2345")}
+    }));
     int expected = 4;
     EXPECT_EQ(expected, Table::getColumnWidth(column, rows));
 }

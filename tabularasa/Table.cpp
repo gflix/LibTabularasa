@@ -57,50 +57,51 @@ std::string Table::separatorLine(const Table::ColumnWidths& widths, bool compact
     return line;
 }
 
-std::string Table::formattedCell(int width, const std::string& text, bool compact, HorizontalAlignment hAlignment)
+std::string Table::formattedCell(int width, const TableCell& cell, bool compact)
 {
     if (width <= 0)
     {
         throw std::domain_error("invalid column width " + std::to_string(width));
     }
 
-    auto textLength = text.size();
+    auto textLength = cell.text.size();
     auto centerPadding = (width - textLength) / 2;
-    std::string cell;
+    std::string paddedCell;
 
     if (textLength < width)
     {
-        switch (hAlignment)
+        switch (cell.hAlignment)
         {
+            case HorizontalAlignment::DEFAULT:
             case HorizontalAlignment::LEFT:
-                cell = text;
-                cell += std::string(width - textLength, ' ');
+                paddedCell = cell.text;
+                paddedCell += std::string(width - textLength, ' ');
                 break;
             case HorizontalAlignment::CENTER:
-                cell = std::string(centerPadding, ' ');
-                cell += text;
-                cell += std::string(width - textLength - centerPadding, ' ');
+                paddedCell = std::string(centerPadding, ' ');
+                paddedCell += cell.text;
+                paddedCell += std::string(width - textLength - centerPadding, ' ');
                 break;
             case HorizontalAlignment::RIGHT:
-                cell = std::string(width - textLength, ' ');
-                cell += text;
+                paddedCell = std::string(width - textLength, ' ');
+                paddedCell += cell.text;
                 break;
         }
     }
     else
     {
-        cell = text.substr(0, width);
+        paddedCell = cell.text.substr(0, width);
     }
 
     if (!compact)
     {
-        cell = ' ' + cell + ' ';
+        paddedCell = ' ' + paddedCell + ' ';
     }
 
-    return cell;
+    return paddedCell;
 }
 
-std::string Table::getRowCell(const TableRow& row, const std::string& id)
+TableCell Table::getRowCell(const TableRow& row, const std::string& id)
 {
     auto it = row.find(id);
     if (it != row.cend())
@@ -126,7 +127,8 @@ std::string Table::formattedHeaderRow(const ColumnWidths& widths, const TableCol
     for (; columnIt != columns.cend(); ++columnIt, ++widthIt)
     {
         line += '|';
-        line += formattedCell(*widthIt, columnIt->title, compact, columnIt->hAlignment);
+        TableCell cell { columnIt->title, columnIt->hAlignment };
+        line += formattedCell(*widthIt, cell, compact);
     }
     line += '|';
 
@@ -149,7 +151,12 @@ std::string Table::formattedRow(const ColumnWidths& widths, const TableColumns& 
     for (; columnIt != columns.cend(); ++columnIt, ++widthIt)
     {
         line += '|';
-        line += formattedCell(*widthIt, getRowCell(row, columnIt->id), compact, columnIt->hAlignment);
+        auto cell = getRowCell(row, columnIt->id);
+        if (cell.hAlignment == HorizontalAlignment::DEFAULT)
+        {
+            cell.hAlignment = columnIt->hAlignment;
+        }
+        line += formattedCell(*widthIt, cell, compact);
     }
     line += '|';
 
@@ -172,7 +179,7 @@ int Table::getColumnWidth(const TableColumn& column, const TableRows& rows)
 
     for (auto& row: rows)
     {
-        width = max(width, getRowCell(row, column.id).size());
+        width = max(width, getRowCell(row, column.id).text.size());
     }
 
     if (column.maxWidth > 0)

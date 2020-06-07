@@ -4,11 +4,12 @@
 #include <map>
 #include <string>
 #include <vector>
+#include <tabularasa/TableCell.hpp>
 
 namespace Tabularasa
 {
 
-typedef std::map<std::string, std::string> TableRow;
+typedef std::map<std::string, TableCell> TableRow;
 typedef std::vector<TableRow> TableRows;
 
 } /* namespace Tabularasa */
