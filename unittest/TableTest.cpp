@@ -149,6 +149,44 @@ TEST(TableTest, putsRegularTableToStreamIII)
     EXPECT_EQ(expected, actual.str());
 }
 
+TEST(TableTest, putsRegularTableToStreamIV)
+{
+    Table table;
+    table.useColors = true;
+    table.columns.push_back(TableColumn("A", "Foo"));
+    table.columns.push_back(TableColumn("B", "Bar"));
+    table.columns.push_back(TableColumn("C", "-"));
+    table.rows.push_back(TableRow({
+        {"A", TableCell("12345")},
+        {"B", TableCell("X")},
+        {"C", TableCell("y", HorizontalAlignment::DEFAULT, CellColor(AnsiColor::GREEN))}
+    }));
+    table.rows.push_back(TableRow({
+        {"A", TableCell("123")},
+        {"B", TableCell("12345-relevant")},
+        {"C", TableCell("n", HorizontalAlignment::DEFAULT, CellColor(AnsiColor::RED))}
+    }));
+    table.rows.push_back(TableRow({
+        {"A", TableCell("2345")},
+        {"B", TableCell("Y")},
+        {"C", TableCell("n", HorizontalAlignment::DEFAULT, CellColor(AnsiColor::RED))}
+    }));
+    std::string expected {
+        "+-------+----------------+---+\n"
+        "| Foo   | Bar            | - |\n"
+        "+-------+----------------+---+\n"
+        "| 12345 | X              |\033[32m y \033[0m|\n"
+        "| 123   | 12345-relevant |\033[31m n \033[0m|\n"
+        "| 2345  | Y              |\033[31m n \033[0m|\n"
+        "+-------+----------------+---+\n"
+    };
+
+    std::stringstream actual;
+    table.toStream(actual);
+
+    EXPECT_EQ(expected, actual.str());
+}
+
 TEST(TableTest, putsCompactTableToStream)
 {
     Table table;
@@ -372,6 +410,22 @@ TEST(TableTest, throwsWhenGeneratingCellWithInvalidWidth)
     int width = 0;
     std::string text { "foozbarbaz" };
     EXPECT_THROW(Table::formattedCell(width, text), std::domain_error);
+}
+
+TEST(TableTest, generatedRegularCellWithEnabledColor)
+{
+    int width = 6;
+    TableCell cell { "foo", HorizontalAlignment::DEFAULT, CellColor(AnsiColor::WHITE, AnsiColor::YELLOW, true) };
+    std::string expected { "\033[37;43;1m foo    \033[0m" };
+    EXPECT_EQ(expected, Table::formattedCell(width, cell, false, true));
+}
+
+TEST(TableTest, generatedRegularCellWithDisabledColor)
+{
+    int width = 6;
+    TableCell cell { "foo", HorizontalAlignment::DEFAULT, CellColor(AnsiColor::WHITE, AnsiColor::YELLOW, true) };
+    std::string expected { " foo    " };
+    EXPECT_EQ(expected, Table::formattedCell(width, cell, false, false));
 }
 
 TEST(TableTest, getsExistingRowCell)
