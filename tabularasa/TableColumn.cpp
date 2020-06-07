@@ -9,12 +9,14 @@ TableColumn::TableColumn(
     const std::string& title,
     int minWidth,
     int maxWidth,
-    HorizontalAlignment hAlignment):
+    HorizontalAlignment hAlignment,
+    CellColor color):
     id(id),
     title(title),
     minWidth(minWidth),
     maxWidth(maxWidth),
-    hAlignment(hAlignment)
+    hAlignment(hAlignment),
+    color(color)
 {
     if (maxWidth > 0 && maxWidth < minWidth)
     {

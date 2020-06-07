@@ -137,7 +137,7 @@ std::string Table::formattedHeaderRow(
     for (; columnIt != columns.cend(); ++columnIt, ++widthIt)
     {
         line += '|';
-        TableCell cell { columnIt->title, columnIt->hAlignment };
+        TableCell cell { columnIt->title, columnIt->hAlignment, columnIt->color };
         line += formattedCell(*widthIt, cell, compact, useColors);
     }
     line += '|';

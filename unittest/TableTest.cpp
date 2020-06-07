@@ -173,7 +173,7 @@ TEST(TableTest, putsRegularTableToStreamIV)
     }));
     std::string expected {
         "+-------+----------------+---+\n"
-        "| Foo   | Bar            | - |\n"
+        "|\033[1m Foo   \033[0m|\033[1m Bar            \033[0m|\033[1m - \033[0m|\n"
         "+-------+----------------+---+\n"
         "| 12345 | X              |\033[32m y \033[0m|\n"
         "| 123   | 12345-relevant |\033[31m n \033[0m|\n"
@@ -448,7 +448,7 @@ TEST(TableTest, getsNonExistingRowCell)
     EXPECT_EQ(expected, Table::getRowCell(row, id).text);
 }
 
-TEST(TableTest, getsRegularFormattedHeaderRow)
+TEST(TableTest, getsRegularFormattedHeaderRowWithColorsDisabled)
 {
     TableColumns columns;
     columns.push_back(TableColumn("A", "Foo"));
@@ -457,6 +457,17 @@ TEST(TableTest, getsRegularFormattedHeaderRow)
     Table::ColumnWidths widths { 3, 2, 5 };
     std::string expected { "| Foo | bA | 1234  |" };
     EXPECT_EQ(expected, Table::formattedHeaderRow(widths, columns));
+}
+
+TEST(TableTest, getsRegularFormattedHeaderRowWithColorsEnabled)
+{
+    TableColumns columns;
+    columns.push_back(TableColumn("A", "Foo"));
+    columns.push_back(TableColumn("B", "bAr"));
+    columns.push_back(TableColumn("C", "1234"));
+    Table::ColumnWidths widths { 3, 2, 5 };
+    std::string expected { "|\033[1m Foo \033[0m|\033[1m bA \033[0m|\033[1m 1234  \033[0m|" };
+    EXPECT_EQ(expected, Table::formattedHeaderRow(widths, columns, false, true));
 }
 
 TEST(TableTest, getsCompactFormattedHeaderRow)

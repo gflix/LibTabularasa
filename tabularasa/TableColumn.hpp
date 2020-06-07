@@ -3,6 +3,7 @@
 
 #include <string>
 #include <vector>
+#include <tabularasa/CellColor.hpp>
 #include <tabularasa/HorizontalAlignment.hpp>
 
 namespace Tabularasa
@@ -15,13 +16,15 @@ struct TableColumn
         const std::string& title = std::string(),
         int minWidth = 0,
         int maxWidth = 0,
-        HorizontalAlignment hAlignment = HorizontalAlignment::LEFT);
+        HorizontalAlignment hAlignment = HorizontalAlignment::LEFT,
+        CellColor color = CellColor(AnsiColor::DEFAULT, AnsiColor::DEFAULT, true));
 
     std::string id;
     std::string title;
     int minWidth;
     int maxWidth;
     HorizontalAlignment hAlignment;
+    CellColor color;
 };
 
 typedef std::vector<TableColumn> TableColumns;
