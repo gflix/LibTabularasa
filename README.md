@@ -39,7 +39,7 @@ Then install the packages using
 sudo dpkg -i ../libtabularasa*.deb
 ```
 
-Make sure you have debhelper installed (```apt install debhelper```).
+Make sure you have debhelper installed (```sudo apt install debhelper```).
 
 ## Usage
 
