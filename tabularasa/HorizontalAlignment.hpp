@@ -6,6 +6,7 @@ namespace Tabularasa
 
 enum class HorizontalAlignment
 {
+    DEFAULT,
     LEFT,
     CENTER,
     RIGHT,
