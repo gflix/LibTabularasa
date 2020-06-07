@@ -1,8 +1,8 @@
-libtabularasa (0.1.0) UNRELEASED; urgency=medium
+libtabularasa (0.1.0) focal; urgency=medium
 
   * Incremented version to 0.1.0 as the library may used in projects now
 
- -- Felix Mellmann <felix.mellmann@funkwerk-itk.com>  Sun, 07 Jun 2020 11:02:08 +0200
+ -- Felix Mellmann <felix.mellmann@funkwerk-itk.com>  Sun, 07 Jun 2020 11:05:00 +0200
 
 libtabularasa (0.0.1) unstable; urgency=medium
 
