@@ -1,5 +1,7 @@
 set(
     LIBRARY_SOURCE_FILES
+    AnsiColor.cpp
+    CellColor.cpp
     HorizontalAlignment.cpp
     Table.cpp
     TableCell.cpp

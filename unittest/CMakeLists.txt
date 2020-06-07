@@ -1,5 +1,6 @@
 set(
     UNITTEST_SOURCE_FILES
+    CellColorTest.cpp
     TableColumnTest.cpp
     TableTest.cpp
 

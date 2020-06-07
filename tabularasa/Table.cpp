@@ -5,7 +5,8 @@ namespace Tabularasa
 {
 
 Table::Table(void):
-    compact(false)
+    compact(false),
+    useColors(false)
 {
 }
 
@@ -28,11 +29,11 @@ void Table::toStream(std::ostream& stream) const
 
     if (!compact)
         stream << separator << std::endl;
-    stream << formattedHeaderRow(columnWidths, columns, compact) << std::endl;
+    stream << formattedHeaderRow(columnWidths, columns, compact, useColors) << std::endl;
     stream << separator << std::endl;
     for (auto& row: rows)
     {
-        stream << formattedRow(columnWidths, columns, row, compact) << std::endl;
+        stream << formattedRow(columnWidths, columns, row, compact, useColors) << std::endl;
     }
     if (!compact)
         stream << separator << std::endl;
@@ -57,7 +58,7 @@ std::string Table::separatorLine(const Table::ColumnWidths& widths, bool compact
     return line;
 }
 
-std::string Table::formattedCell(int width, const TableCell& cell, bool compact)
+std::string Table::formattedCell(int width, const TableCell& cell, bool compact, bool useColors)
 {
     if (width <= 0)
     {
@@ -98,6 +99,11 @@ std::string Table::formattedCell(int width, const TableCell& cell, bool compact)
         paddedCell = ' ' + paddedCell + ' ';
     }
 
+    if (useColors && !cell.color.isDefault())
+    {
+        paddedCell = cell.color.setSequence() + paddedCell + cell.color.resetSequence();
+    }
+
     return paddedCell;
 }
 
@@ -111,7 +117,11 @@ TableCell Table::getRowCell(const TableRow& row, const std::string& id)
     return std::string();
 }
 
-std::string Table::formattedHeaderRow(const ColumnWidths& widths, const TableColumns& columns, bool compact)
+std::string Table::formattedHeaderRow(
+    const ColumnWidths& widths,
+    const TableColumns& columns,
+    bool compact,
+    bool useColors)
 {
     if (columns.size() != widths.size())
     {
@@ -127,15 +137,20 @@ std::string Table::formattedHeaderRow(const ColumnWidths& widths, const TableCol
     for (; columnIt != columns.cend(); ++columnIt, ++widthIt)
     {
         line += '|';
-        TableCell cell { columnIt->title, columnIt->hAlignment };
-        line += formattedCell(*widthIt, cell, compact);
+        TableCell cell { columnIt->title, columnIt->hAlignment, columnIt->color };
+        line += formattedCell(*widthIt, cell, compact, useColors);
     }
     line += '|';
 
     return line;
 }
 
-std::string Table::formattedRow(const ColumnWidths& widths, const TableColumns& columns, const TableRow& row, bool compact)
+std::string Table::formattedRow(
+    const ColumnWidths& widths,
+    const TableColumns& columns,
+    const TableRow& row,
+    bool compact,
+    bool useColors)
 {
     if (columns.size() != widths.size())
     {
@@ -156,7 +171,7 @@ std::string Table::formattedRow(const ColumnWidths& widths, const TableColumns& 
         {
             cell.hAlignment = columnIt->hAlignment;
         }
-        line += formattedCell(*widthIt, cell, compact);
+        line += formattedCell(*widthIt, cell, compact, useColors);
     }
     line += '|';
 

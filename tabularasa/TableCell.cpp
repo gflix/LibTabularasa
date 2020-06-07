@@ -5,9 +5,11 @@ namespace Tabularasa
 
 TableCell::TableCell(
     const std::string& text,
-    HorizontalAlignment hAlignment):
+    HorizontalAlignment hAlignment,
+    const CellColor& color):
     text(text),
-    hAlignment(hAlignment)
+    hAlignment(hAlignment),
+    color(color)
 {
 }
 
