@@ -27,6 +27,6 @@ steps:
   - apt install -y build-essential cmake ninja-build
   - mkdir build
   - cd build
-  - cmake -DWITH_UNITTEST=True -GNinja ..
+  - cmake -DWITH_UNITTESTS=True -GNinja ..
   - ninja gtest
   - ./gtest
