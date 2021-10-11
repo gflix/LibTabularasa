@@ -9,5 +9,5 @@ steps:
     DEBIAN_FRONTEND: noninteractive
   commands:
   - apt update
-  - apt install -y debhelper
+  - apt install -y debhelper cmake
   - dpkg-buildpackage -uc -us -b
