@@ -1,0 +1,32 @@
+kind: pipeline
+type: docker
+name: unittests
+
+steps:
+- name: run unittests
+  image: ubuntu:20.04
+  environment:
+    DEBIAN_FRONTEND: noninteractive
+  commands:
+  - apt update
+  - apt install -y build-essential cmake ninja-build
+  - mkdir build
+  - cd build
+  - cmake -DWITH_UNITTESTS=True -GNinja ..
+  - ninja gtest
+  - ./gtest
+
+---
+kind: pipeline
+type: docker
+name: ubuntu-focal
+
+steps:
+- name: build package
+  image: ubuntu:20.04
+  environment:
+    DEBIAN_FRONTEND: noninteractive
+  commands:
+  - apt update
+  - apt install -y debhelper cmake
+  - dpkg-buildpackage -uc -us -b
