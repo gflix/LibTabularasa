@@ -5,6 +5,8 @@ name: debian-package
 steps:
 - name: build debian package
   image: ubuntu:20.04
+  environment:
+    DEBIAN_FRONTEND: noninteractive
   commands:
   - apt update
   - apt install -y debhelper
