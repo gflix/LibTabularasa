@@ -4,7 +4,7 @@ name: unittests
 
 steps:
 - name: run unittests
-  image: ubuntu:20.04
+  image: ubuntu:22.04
   environment:
     DEBIAN_FRONTEND: noninteractive
   commands:
@@ -29,4 +29,19 @@ steps:
   commands:
   - apt update
   - apt install -y debhelper cmake
-  - dpkg-buildpackage -uc -us -b
+  - dpkg-buildpackage -uc -us -b -j2
+
+---
+kind: pipeline
+type: docker
+name: ubuntu-jammy
+
+steps:
+- name: build package
+  image: ubuntu:22.04
+  environment:
+    DEBIAN_FRONTEND: noninteractive
+  commands:
+  - apt update
+  - apt install -y debhelper cmake
+  - dpkg-buildpackage -uc -us -b -j2
