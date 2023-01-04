@@ -4,12 +4,10 @@ name: unittests
 
 steps:
 - name: run unittests
-  image: ubuntu:22.04
+  image: nx.benfm.de:5000/drone-container:22.04
   environment:
     DEBIAN_FRONTEND: noninteractive
   commands:
-  - apt update
-  - apt install -y build-essential cmake ninja-build
   - mkdir build
   - cd build
   - cmake -DWITH_UNITTESTS=True -GNinja ..
@@ -38,10 +36,8 @@ name: ubuntu-jammy
 
 steps:
 - name: build package
-  image: ubuntu:22.04
+  image: nx.benfm.de:5000/drone-container:22.04
   environment:
     DEBIAN_FRONTEND: noninteractive
   commands:
-  - apt update
-  - apt install -y debhelper cmake
   - dpkg-buildpackage -uc -us -b -j2
