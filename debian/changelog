@@ -1,3 +1,9 @@
+libtabularasa (0.1.1) jammy; urgency=medium
+
+  * Mod: Patch release after integrating into Drone CI
+
+ -- Felix Mellmann <felix.mellmann@funkwerk-itk.com>  Wed, 04 Jan 2023 16:05:50 +0100
+
 libtabularasa (0.1.0) focal; urgency=medium
 
   * Incremented version to 0.1.0 as the library may used in projects now
