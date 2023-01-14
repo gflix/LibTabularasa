@@ -13,31 +13,45 @@ steps:
   - cmake -DWITH_UNITTESTS=True -GNinja ..
   - ninja gtest
   - ./gtest
-
----
+----
 kind: pipeline
 type: docker
 name: ubuntu-focal
 
 steps:
-- name: build package
-  image: ubuntu:20.04
+- name: build packages
+  image: nx.benfm.de:5000/drone-container:20.04
   environment:
     DEBIAN_FRONTEND: noninteractive
   commands:
-  - apt update
-  - apt install -y debhelper cmake
   - dpkg-buildpackage -uc -us -b -j2
+  - cp -v ../*.deb debian/
 
+- name: push packages
+  image: nx.benfm.de:5000/drone-push-ubuntu
+  settings:
+    repository: ubuntu-focal
+  when:
+    branch:
+    - main
 ---
 kind: pipeline
 type: docker
 name: ubuntu-jammy
 
 steps:
-- name: build package
+- name: build packages
   image: nx.benfm.de:5000/drone-container:22.04
   environment:
     DEBIAN_FRONTEND: noninteractive
   commands:
   - dpkg-buildpackage -uc -us -b -j2
+  - cp -v ../*.deb debian/
+
+- name: push packages
+  image: nx.benfm.de:5000/drone-push-ubuntu
+  settings:
+    repository: ubuntu-jammy
+  when:
+    branch:
+    - main
