@@ -18,6 +18,9 @@ kind: pipeline
 type: docker
 name: ubuntu-focal
 
+depends_on:
+  - unittests
+
 steps:
 - name: build packages
   image: nx.benfm.de:5000/drone-container:20.04
@@ -39,6 +42,9 @@ kind: pipeline
 type: docker
 name: ubuntu-jammy
 
+depends_on:
+  - unittests
+
 steps:
 - name: build packages
   image: nx.benfm.de:5000/drone-container:22.04
@@ -55,3 +61,18 @@ steps:
   when:
     branch:
     - main
+---
+kind: pipeline
+name: email-notification
+
+depends_on:
+  - ubuntu-focal
+  - ubuntu-jammy
+
+steps:
+- name: notify
+  image: drillster/drone-email
+  settings:
+    host: mx.benfm.de
+    from: drone@benfm.de
+    skip_verify: true
