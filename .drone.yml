@@ -104,7 +104,7 @@ trigger:
 
 steps:
 - name: notify
-  image: drillster/drone-email
+  image: plugins/email
   settings:
     host: mx.benfm.de
     from: drone@benfm.de
