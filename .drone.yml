@@ -108,7 +108,6 @@ steps:
   settings:
     host: mx.benfm.de
     from: drone@benfm.de
-    skip_verify: true
   when:
     status:
     - failure
