@@ -1,7 +1,7 @@
 local Unittest() = {
   "kind": "pipeline",
   "type": "docker",
-  "name": unittests,
+  "name": "unittests",
   "steps": [
     {
       "name": "run unittests",
